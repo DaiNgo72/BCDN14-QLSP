@@ -144,45 +144,51 @@
                 &times;
               </button>
             </div>
-            <!-- Modal body -->
-            <div class="modal-body">
-              <div class="form-group">
-                <label>Tên Sản Phẩm</label>
-                <input
-                  id="TenSP"
-                  class="form-control"
-                  placeholder="Nhập vào tên sản phẩm"
-                />
+            <form id="form-product">
+              <!-- Modal body -->
+              <div class="modal-body">
+                <div class="form-group">
+                  <label>Tên Sản Phẩm</label>
+                  <input
+                    name="name"
+                    id="TenSP"
+                    class="form-control"
+                    placeholder="Nhập vào tên sản phẩm"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Giá</label>
+                  <input
+                    name="price"
+                    id="GiaSP"
+                    class="form-control"
+                    placeholder="Nhập vào giá"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Hình Ảnh</label>
+                  <input
+                    name="image"
+                    id="HinhSP"
+                    class="form-control"
+                    placeholder="Nhập vào hình sản phẩm"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="">Loại sản phẩm: </label>
+                  <select name="type" class="form-control" id="loaiSP">
+                    <option value="phone">Phone</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
               </div>
-              <div class="form-group">
-                <label>Giá</label>
-                <input
-                  id="GiaSP"
-                  class="form-control"
-                  placeholder="Nhập vào giá"
-                />
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <!-- ❌ -->
+                <button class="btn btn-success" type="submit">Submit</button>
               </div>
-              <div class="form-group">
-                <label>Hình Ảnh</label>
-                <input
-                  id="HinhSP"
-                  class="form-control"
-                  placeholder="Nhập vào hình sản phẩm"
-                />
-              </div>
-              <div class="form-group">
-                <label for="">Loại sản phẩm: </label>
-                <select class="form-control" id="loaiSP">
-                  <option value="phone">Phone</option>
-                  <option value="laptop">Laptop</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-              <button class="btn btn-success">Submit</button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -214,5 +220,7 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+    <script type="module" src="./index.js"></script>
   </body>
 </html>
