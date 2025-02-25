@@ -8,8 +8,9 @@ document.getElementById('form-product').addEventListener(
         event.preventDefault();
 
         console.log("submit", event.target);
+        const formEle = event.target;
 
-        let data = new FormData(event.target);
+        let data = new FormData(formEle);
 
         /**
          * convert dữ liệu từ formData thành object
@@ -36,6 +37,24 @@ document.getElementById('form-product').addEventListener(
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+        }).then(function (r) {
+            if (r.ok) {
+
+                // Query với attribute của html nên dùng dấu `[ ]` 
+                const closeEle = document.querySelector("[data-dismiss='modal']")
+
+                // Giải lập sự kiện click vào close button
+                closeEle.click();
+
+                // reset form
+                formEle.reset();
+
+                // Alert thông báo thành công
+                alert("Thêm sản phẩm thành công.")
+            } else {
+                // Alert thông báo thất bại
+                alert("Thêm sản phẩm thất bại.")
+            }
         })
     }
 )
