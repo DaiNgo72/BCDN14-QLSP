@@ -1,3 +1,4 @@
+import { getListProduct, deleteProduct } from "../services/product.js";
 import { BASE_URL } from "./constant.js"
 
 document.getElementById('form-product').addEventListener(
@@ -50,7 +51,11 @@ document.getElementById('form-product').addEventListener(
                 formEle.reset();
 
                 // Alert thông báo thành công
-                alert("Thêm sản phẩm thành công.")
+                alert("Thêm sản phẩm thành công.");
+
+
+                // re-render list Product
+                renderListProduct();
             } else {
                 // Alert thông báo thất bại
                 alert("Thêm sản phẩm thất bại.")
@@ -58,3 +63,92 @@ document.getElementById('form-product').addEventListener(
         })
     }
 )
+
+//#region render list sản phẩm
+
+function renderListProduct() {
+    getListProduct()
+        .then(function (r) {
+
+            // let contentHTML = ''
+
+            // r.forEach(function (product) {
+            //     contentHTML += `
+            //     <tr>
+            //       <td>${product.id}</td>
+            //       <td>${product.name}</td>
+            //       <td>${product.price} vnd</td>
+            //       <td>
+            //         <img width='400' src="${product.image}" alt="" >
+            //       </td>
+            //       <td>${product.type}</td>
+            //       <td>
+            //         <button class='btn btn-warning'>Edit</button>
+            //         <button class='btn btn-danger'>Delete</button>
+            //       </td>
+            //     </tr>
+            //     `
+            // })
+            // document.getElementById('tblDanhSachSP').innerHTML = contentHTML;
+
+
+            let nContent = r.map(function (product) {
+                return `
+                <tr>
+                  <td>${product.id}</td>
+                  <td>${product.name}</td>
+                  <td>${product.price} vnd</td>
+                  <td>
+                    <img width='100' src="${product.image}" alt="" >
+                  </td>
+                  <td>${product.type}</td>
+                  <td>
+                    <button class='btn btn-warning'>Edit</button>
+                    <button onclick="handleDelete('${product.id}')" class='btn btn-danger'>Delete</button>
+                  </td>
+                </tr>
+                `
+            })
+            // join: convert mảng -> string
+            // [1,2,3,4] => `1  2  3  4`
+            // [1,2,3,4].join("  ")
+
+
+            // split để chuyển string -> array
+            // "1 2 3 4".split(' ') => [1,2,3,4]
+
+            // document.getElementById('tblDanhSachSP').innerHTML = nContent.join("");
+            document.getElementById('tblDanhSachSP').innerHTML = nContent;
+
+            // document.querySelectorAll('.btn-danger').forEach(function (btn) {
+            //     btn.addEventListener('click', handleDelete);
+            // })
+        })
+        .catch(function (error) {
+            console.log("[ERROR] :::", error);
+        })
+}
+
+renderListProduct();
+
+//#endregion
+
+// gắn sự kiện click cho button delete
+
+function handleDelete(id) {
+    console.log(id);
+
+    deleteProduct(id)
+        .then(function (r) {
+            alert(`Xóa sản phẩm id=${id} thành công.`);
+
+            renderListProduct();
+        }).catch(function (error) {
+            console.log(error);
+        })
+}
+
+window.handleDelete = handleDelete;
+
+
+

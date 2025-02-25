@@ -1,16 +1,39 @@
-function createProduct(result) {
-    fetch(`${BASE_URL}/product`, {
-        method: "POST",
-        // body: nơi để gửi dữ liệu lên server
-        // convert dữ liệu trước khi gửi lên server về dạng string 
+import { BASE_URL } from "../views/constant.js"
 
-        // JSON.stringify: convert tất cả kiểu dữ liệu của js về dạng string
-        body: JSON.stringify(result),
+export function getListProduct() {
+    return fetch(`${BASE_URL}/product`)
+        .then(function (r) {
+            if (r.ok) {
+                return r.json();
+            } else {
+                throw "getListProduct fail !!!";
+            }
+        })
+}
 
-        // Bổ sung thêm thông tin dữ liệu đẩy lên là kiểu định dạng như thế nào
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
+export function deleteProduct(id) {
+    return fetch(`${BASE_URL}/product/${id}`, {
+        method: "delete"
+    }).then(function (r) {
+        if (r.ok) {
+            return r.json();
+        } else {
+            throw "deleteProduct fail !!!";
+        }
     })
 }
+
+// function _fetch() {
+//     return {
+//         then() { },
+//         catch() { }
+//     }
+// }
+
+// function render() {
+//     return _fetch()
+// }
+
+
+// render().then()
+
