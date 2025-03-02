@@ -1,5 +1,10 @@
-import { getListProduct, deleteProduct } from "../services/product.js";
+import { getListProduct, deleteProduct, getDetailProduct } from "../services/product.js";
 import { BASE_URL } from "./constant.js"
+
+
+// editId == null    => add
+// editId !== null   => update
+let editId = null;
 
 document.getElementById('form-product').addEventListener(
     "submit",
@@ -25,42 +30,81 @@ document.getElementById('form-product').addEventListener(
         //     data.get('name')
         // )
 
-        fetch(`${BASE_URL}/product`, {
-            method: "POST",
-            // body: nơi để gửi dữ liệu lên server
-            // convert dữ liệu trước khi gửi lên server về dạng string 
-
-            // JSON.stringify: convert tất cả kiểu dữ liệu của js về dạng string
-            body: JSON.stringify(result),
-
-            // Bổ sung thêm thông tin dữ liệu đẩy lên là kiểu định dạng như thế nào
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-        }).then(function (r) {
-            if (r.ok) {
-
-                // Query với attribute của html nên dùng dấu `[ ]` 
-                const closeEle = document.querySelector("[data-dismiss='modal']")
-
-                // Giải lập sự kiện click vào close button
-                closeEle.click();
-
-                // reset form
-                formEle.reset();
-
-                // Alert thông báo thành công
-                alert("Thêm sản phẩm thành công.");
 
 
-                // re-render list Product
-                renderListProduct();
-            } else {
-                // Alert thông báo thất bại
-                alert("Thêm sản phẩm thất bại.")
-            }
-        })
+        // ---------------
+
+        if (editId === null) {
+            fetch(`${BASE_URL}/product`, {
+                method: "POST",
+                // body: nơi để gửi dữ liệu lên server
+                // convert dữ liệu trước khi gửi lên server về dạng string 
+
+                // JSON.stringify: convert tất cả kiểu dữ liệu của js về dạng string
+                body: JSON.stringify(result),
+
+                // Bổ sung thêm thông tin dữ liệu đẩy lên là kiểu định dạng như thế nào
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }).then(function (r) {
+                if (r.ok) {
+
+                    // Query với attribute của html nên dùng dấu `[ ]` 
+                    const closeEle = document.querySelector("[data-dismiss='modal']")
+
+                    // Giải lập sự kiện click vào close button
+                    closeEle.click();
+
+                    // reset form
+                    formEle.reset();
+
+                    // Alert thông báo thành công
+                    alert("Thêm sản phẩm thành công.");
+
+
+                    // re-render list Product
+                    renderListProduct();
+                } else {
+                    // Alert thông báo thất bại
+                    alert("Thêm sản phẩm thất bại.")
+                }
+            })
+        } else {
+            fetch(`${BASE_URL}/product/${editId}`, {
+                method: "put",
+
+                body: JSON.stringify(result),
+
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            }).then(function (r) {
+                if (r.ok) {
+
+                    // Query với attribute của html nên dùng dấu `[ ]` 
+                    const closeEle = document.querySelector("[data-dismiss='modal']")
+
+                    // Giải lập sự kiện click vào close button
+                    closeEle.click();
+
+                    // reset form
+                    formEle.reset();
+
+                    // Alert thông báo thành công
+                    alert("Thêm sản phẩm thành công.");
+
+
+                    // re-render list Product
+                    renderListProduct();
+                } else {
+                    // Alert thông báo thất bại
+                    alert("Thêm sản phẩm thất bại.")
+                }
+            })
+        }
     }
 )
 
@@ -103,7 +147,7 @@ function renderListProduct() {
                   </td>
                   <td>${product.type}</td>
                   <td>
-                    <button class='btn btn-warning'>Edit</button>
+                    <button data-id='${product.id}' data-toggle="modal" data-target="#myModal" class='btn btn-warning'>Edit</button>
                     <button onclick="handleDelete('${product.id}')" class='btn btn-danger'>Delete</button>
                   </td>
                 </tr>
@@ -120,9 +164,16 @@ function renderListProduct() {
             // document.getElementById('tblDanhSachSP').innerHTML = nContent.join("");
             document.getElementById('tblDanhSachSP').innerHTML = nContent;
 
-            // document.querySelectorAll('.btn-danger').forEach(function (btn) {
-            //     btn.addEventListener('click', handleDelete);
-            // })
+            // Cách 2:
+            document.querySelectorAll('.btn-warning').forEach(function (btn) {
+                console.log(btn.getAttribute('data-id'));
+                // let id = btn.getAttribute('data-id');
+                let id = btn.dataset.id;
+
+                btn.addEventListener('click', function () {
+                    handleEdit(id);
+                });
+            })
         })
         .catch(function (error) {
             console.log("[ERROR] :::", error);
@@ -150,5 +201,23 @@ function handleDelete(id) {
 
 window.handleDelete = handleDelete;
 
+
+function handleEdit(id) {
+    editId = id;
+
+    getDetailProduct(id)
+        .then(function (r) {
+            console.log(r);
+            // Load ngược dữ liệu từ api lên form ui
+            document.getElementById('TenSP').value = r.name;
+            document.getElementById('GiaSP').value = r.price;
+            document.getElementById('HinhSP').value = r.image;
+            document.getElementById('loaiSP').value = r.type;
+        })
+        .catch(function (error) {
+            console.log('error :::', error)
+        })
+
+}
 
 

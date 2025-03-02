@@ -23,6 +23,16 @@ export function deleteProduct(id) {
     })
 }
 
+export function getDetailProduct(id) {
+    return fetch(`${BASE_URL}/product/${id}`).then(function (r) {
+        if (r.ok) {
+            return r.json();
+        } else {
+            throw "getDetailProduct fail !!!";
+        }
+    })
+}
+
 // function _fetch() {
 //     return {
 //         then() { },
@@ -34,6 +44,18 @@ export function deleteProduct(id) {
 //     return _fetch()
 // }
 
-
 // render().then()
 
+// default params value
+function _fetch(method = 'get') {
+    // console.log(method || "get")
+    console.log(method)
+}
+
+_fetch() // get
+_fetch('get')// get
+_fetch('post') // post
+_fetch('delete') // delete
+_fetch('put') // put 
+_fetch('patch') // patch 
+_fetch('bcdn14') // bcdn14 
